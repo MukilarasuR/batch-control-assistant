@@ -3,7 +3,7 @@
   <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.53">
     <root id="1">
       <DateStyle>dmy</DateStyle>
-      <IntrospectionStateNumber>788</IntrospectionStateNumber>
+      <IntrospectionStateNumber>800</IntrospectionStateNumber>
       <ServerVersion>17.5</ServerVersion>
       <StartupTime>1748461388</StartupTime>
       <TimeZones>true ACDT
@@ -801,7 +801,7 @@ false Zulu
 14751||10|C|G
 14751||-9223372036854775808|U|G
 14751||10|U|G</Grants>
-      <IntrospectionStateNumber>788</IntrospectionStateNumber>
+      <IntrospectionStateNumber>800</IntrospectionStateNumber>
       <ObjectId>19370</ObjectId>
       <OwnerName>postgres</OwnerName>
     </database>
@@ -4232,13 +4232,37 @@ false Zulu
     <schema id="266" parent="2" name="public">
       <Comment>standard public schema</Comment>
       <Current>1</Current>
-      <IntrospectionStateNumber>788</IntrospectionStateNumber>
-      <LastIntrospectionLocalTimestamp>2025-05-30.13:53:43</LastIntrospectionLocalTimestamp>
+      <IntrospectionStateNumber>800</IntrospectionStateNumber>
+      <LastIntrospectionLocalTimestamp>2025-05-31.07:23:53</LastIntrospectionLocalTimestamp>
       <ObjectId>2200</ObjectId>
       <StateNumber>532</StateNumber>
       <OwnerName>pg_database_owner</OwnerName>
     </schema>
-    <sequence id="267" parent="266" name="users_id_seq">
+    <sequence id="267" parent="266" name="batch_tracking_id_seq">
+      <ObjectId>19433</ObjectId>
+      <SequenceIdentity>1</SequenceIdentity>
+      <StartValue>1</StartValue>
+      <StateNumber>794</StateNumber>
+      <StoredType>integer|0s</StoredType>
+      <OwnerName>postgres</OwnerName>
+    </sequence>
+    <sequence id="268" parent="266" name="batches_id_seq">
+      <ObjectId>19414</ObjectId>
+      <SequenceIdentity>1</SequenceIdentity>
+      <StartValue>1</StartValue>
+      <StateNumber>793</StateNumber>
+      <StoredType>integer|0s</StoredType>
+      <OwnerName>postgres</OwnerName>
+    </sequence>
+    <sequence id="269" parent="266" name="products_id_seq">
+      <ObjectId>19407</ObjectId>
+      <SequenceIdentity>1</SequenceIdentity>
+      <StartValue>1</StartValue>
+      <StateNumber>792</StateNumber>
+      <StoredType>integer|0s</StoredType>
+      <OwnerName>postgres</OwnerName>
+    </sequence>
+    <sequence id="270" parent="266" name="users_id_seq">
       <ObjectId>19371</ObjectId>
       <SequenceIdentity>1</SequenceIdentity>
       <StartValue>1</StartValue>
@@ -4246,13 +4270,390 @@ false Zulu
       <StoredType>integer|0s</StoredType>
       <OwnerName>postgres</OwnerName>
     </sequence>
-    <table id="268" parent="266" name="users">
+    <table id="271" parent="266" name="batch_tracking">
+      <ObjectId>19434</ObjectId>
+      <StateNumber>794</StateNumber>
+      <AccessMethodId>2</AccessMethodId>
+      <OwnerName>postgres</OwnerName>
+    </table>
+    <table id="272" parent="266" name="batches">
+      <ObjectId>19415</ObjectId>
+      <StateNumber>793</StateNumber>
+      <AccessMethodId>2</AccessMethodId>
+      <OwnerName>postgres</OwnerName>
+    </table>
+    <table id="273" parent="266" name="departments">
+      <ObjectId>19382</ObjectId>
+      <StateNumber>790</StateNumber>
+      <AccessMethodId>2</AccessMethodId>
+      <OwnerName>postgres</OwnerName>
+    </table>
+    <table id="274" parent="266" name="employees">
+      <ObjectId>19388</ObjectId>
+      <StateNumber>790</StateNumber>
+      <AccessMethodId>2</AccessMethodId>
+      <OwnerName>postgres</OwnerName>
+    </table>
+    <table id="275" parent="266" name="products">
+      <ObjectId>19408</ObjectId>
+      <StateNumber>793</StateNumber>
+      <AccessMethodId>2</AccessMethodId>
+      <OwnerName>postgres</OwnerName>
+    </table>
+    <table id="276" parent="266" name="users">
       <ObjectId>19372</ObjectId>
       <StateNumber>785</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <column id="269" parent="268" name="id">
+    <check id="277" parent="271" name="batch_tracking_status_check">
+      <ColNames>status</ColNames>
+      <ObjectId>19439</ObjectId>
+      <Predicate>(status)::text = ANY ((ARRAY[&apos;Manufactured&apos;::character varying, &apos;In Transit&apos;::character varying, &apos;Delivered&apos;::character varying])::text[])</Predicate>
+      <StateNumber>794</StateNumber>
+    </check>
+    <column id="278" parent="271" name="id">
+      <DefaultExpression>nextval(&apos;batch_tracking_id_seq&apos;::regclass)</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StateNumber>794</StateNumber>
+      <StoredType>integer|0s</StoredType>
+      <SequenceId>19433</SequenceId>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="279" parent="271" name="batch_id">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StateNumber>794</StateNumber>
+      <StoredType>integer|0s</StoredType>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="280" parent="271" name="location">
+      <Position>3</Position>
+      <StateNumber>794</StateNumber>
+      <StoredType>varchar(200)|0s</StoredType>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="281" parent="271" name="status">
+      <Position>4</Position>
+      <StateNumber>794</StateNumber>
+      <StoredType>varchar(20)|0s</StoredType>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="282" parent="271" name="timestamp">
+      <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
+      <Position>5</Position>
+      <StateNumber>794</StateNumber>
+      <StoredType>timestamp|0s</StoredType>
+      <TypeId>1114</TypeId>
+    </column>
+    <column id="283" parent="271" name="handled_by">
+      <Position>6</Position>
+      <StateNumber>794</StateNumber>
+      <StoredType>uuid|0s</StoredType>
+      <TypeId>2950</TypeId>
+    </column>
+    <foreign-key id="284" parent="271" name="batch_tracking_batch_id_fkey">
+      <ColNames>batch_id</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>19442</ObjectId>
+      <StateNumber>794</StateNumber>
+      <RefKeyColPositions>1</RefKeyColPositions>
+      <RefTableId>19415</RefTableId>
+    </foreign-key>
+    <foreign-key id="285" parent="271" name="batch_tracking_handled_by_fkey">
+      <ColNames>handled_by</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>19447</ObjectId>
+      <StateNumber>794</StateNumber>
+      <RefKeyColPositions>1</RefKeyColPositions>
+      <RefTableId>19388</RefTableId>
+    </foreign-key>
+    <index id="286" parent="271" name="batch_tracking_pkey">
+      <ColNames>id</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>19440</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>794</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+    </index>
+    <key id="287" parent="271" name="batch_tracking_pkey">
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>19441</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>794</StateNumber>
+      <UnderlyingIndexId>19440</UnderlyingIndexId>
+    </key>
+    <column id="288" parent="272" name="id">
+      <DefaultExpression>nextval(&apos;batches_id_seq&apos;::regclass)</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StateNumber>793</StateNumber>
+      <StoredType>integer|0s</StoredType>
+      <SequenceId>19414</SequenceId>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="289" parent="272" name="product_id">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StateNumber>793</StateNumber>
+      <StoredType>integer|0s</StoredType>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="290" parent="272" name="batch_code">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StateNumber>793</StateNumber>
+      <StoredType>varchar(50)|0s</StoredType>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="291" parent="272" name="quantity">
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+      <StateNumber>793</StateNumber>
+      <StoredType>integer|0s</StoredType>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="292" parent="272" name="manufactured_date">
+      <NotNull>1</NotNull>
+      <Position>5</Position>
+      <StateNumber>793</StateNumber>
+      <StoredType>date|0s</StoredType>
+      <TypeId>1082</TypeId>
+    </column>
+    <column id="293" parent="272" name="expiry_date">
+      <Position>6</Position>
+      <StateNumber>793</StateNumber>
+      <StoredType>date|0s</StoredType>
+      <TypeId>1082</TypeId>
+    </column>
+    <column id="294" parent="272" name="created_by">
+      <Position>7</Position>
+      <StateNumber>793</StateNumber>
+      <StoredType>uuid|0s</StoredType>
+      <TypeId>2950</TypeId>
+    </column>
+    <foreign-key id="295" parent="272" name="batches_product_id_fkey">
+      <ColNames>product_id</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>19423</ObjectId>
+      <StateNumber>793</StateNumber>
+      <RefKeyColPositions>1</RefKeyColPositions>
+      <RefTableId>19408</RefTableId>
+    </foreign-key>
+    <foreign-key id="296" parent="272" name="batches_created_by_fkey">
+      <ColNames>created_by</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>19428</ObjectId>
+      <StateNumber>793</StateNumber>
+      <RefKeyColPositions>1</RefKeyColPositions>
+      <RefTableId>19388</RefTableId>
+    </foreign-key>
+    <index id="297" parent="272" name="batches_pkey">
+      <ColNames>id</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>19419</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>793</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+    </index>
+    <index id="298" parent="272" name="batches_batch_code_key">
+      <ColNames>batch_code</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>19421</ObjectId>
+      <StateNumber>793</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+      <CollationNames>default</CollationNames>
+      <CollationIds>100</CollationIds>
+      <CollationParentNames>pg_catalog</CollationParentNames>
+    </index>
+    <key id="299" parent="272" name="batches_pkey">
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>19420</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>793</StateNumber>
+      <UnderlyingIndexId>19419</UnderlyingIndexId>
+    </key>
+    <key id="300" parent="272" name="batches_batch_code_key">
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>19422</ObjectId>
+      <StateNumber>793</StateNumber>
+      <UnderlyingIndexId>19421</UnderlyingIndexId>
+    </key>
+    <column id="301" parent="273" name="id">
+      <DefaultExpression>gen_random_uuid()</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StateNumber>789</StateNumber>
+      <StoredType>uuid|0s</StoredType>
+      <TypeId>2950</TypeId>
+    </column>
+    <column id="302" parent="273" name="name">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StateNumber>789</StateNumber>
+      <StoredType>varchar(100)|0s</StoredType>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="303" parent="273" name="head_id">
+      <Position>3</Position>
+      <StateNumber>789</StateNumber>
+      <StoredType>uuid|0s</StoredType>
+      <TypeId>2950</TypeId>
+    </column>
+    <foreign-key id="304" parent="273" name="fk_department_head">
+      <ColNames>head_id</ColNames>
+      <ObjectId>19402</ObjectId>
+      <StateNumber>791</StateNumber>
+      <RefKeyColPositions>1</RefKeyColPositions>
+      <RefTableId>19388</RefTableId>
+    </foreign-key>
+    <index id="305" parent="273" name="departments_pkey">
+      <ColNames>id</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>19386</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>789</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+    </index>
+    <key id="306" parent="273" name="departments_pkey">
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>19387</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>789</StateNumber>
+      <UnderlyingIndexId>19386</UnderlyingIndexId>
+    </key>
+    <column id="307" parent="274" name="id">
+      <DefaultExpression>gen_random_uuid()</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StateNumber>790</StateNumber>
+      <StoredType>uuid|0s</StoredType>
+      <TypeId>2950</TypeId>
+    </column>
+    <column id="308" parent="274" name="name">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StateNumber>790</StateNumber>
+      <StoredType>varchar(100)|0s</StoredType>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="309" parent="274" name="email">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StateNumber>790</StateNumber>
+      <StoredType>varchar(150)|0s</StoredType>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="310" parent="274" name="department_id">
+      <Position>4</Position>
+      <StateNumber>790</StateNumber>
+      <StoredType>uuid|0s</StoredType>
+      <TypeId>2950</TypeId>
+    </column>
+    <column id="311" parent="274" name="designation">
+      <Position>5</Position>
+      <StateNumber>790</StateNumber>
+      <StoredType>varchar(100)|0s</StoredType>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="312" parent="274" name="date_joined">
+      <DefaultExpression>CURRENT_DATE</DefaultExpression>
+      <Position>6</Position>
+      <StateNumber>790</StateNumber>
+      <StoredType>date|0s</StoredType>
+      <TypeId>1082</TypeId>
+    </column>
+    <foreign-key id="313" parent="274" name="employees_department_id_fkey">
+      <ColNames>department_id</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>19397</ObjectId>
+      <StateNumber>790</StateNumber>
+      <RefKeyColPositions>1</RefKeyColPositions>
+      <RefTableId>19382</RefTableId>
+    </foreign-key>
+    <index id="314" parent="274" name="employees_pkey">
+      <ColNames>id</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>19393</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>790</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+    </index>
+    <index id="315" parent="274" name="employees_email_key">
+      <ColNames>email</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>19395</ObjectId>
+      <StateNumber>790</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+      <CollationNames>default</CollationNames>
+      <CollationIds>100</CollationIds>
+      <CollationParentNames>pg_catalog</CollationParentNames>
+    </index>
+    <key id="316" parent="274" name="employees_pkey">
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>19394</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>790</StateNumber>
+      <UnderlyingIndexId>19393</UnderlyingIndexId>
+    </key>
+    <key id="317" parent="274" name="employees_email_key">
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>19396</ObjectId>
+      <StateNumber>790</StateNumber>
+      <UnderlyingIndexId>19395</UnderlyingIndexId>
+    </key>
+    <column id="318" parent="275" name="id">
+      <DefaultExpression>nextval(&apos;products_id_seq&apos;::regclass)</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StateNumber>792</StateNumber>
+      <StoredType>integer|0s</StoredType>
+      <SequenceId>19407</SequenceId>
+      <TypeId>23</TypeId>
+    </column>
+    <column id="319" parent="275" name="name">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StateNumber>792</StateNumber>
+      <StoredType>varchar(200)|0s</StoredType>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="320" parent="275" name="category">
+      <Position>3</Position>
+      <StateNumber>792</StateNumber>
+      <StoredType>varchar(100)|0s</StoredType>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="321" parent="275" name="unit_price">
+      <Position>4</Position>
+      <StateNumber>792</StateNumber>
+      <StoredType>numeric(10,2 digit)|0s</StoredType>
+      <TypeId>1700</TypeId>
+    </column>
+    <index id="322" parent="275" name="products_pkey">
+      <ColNames>id</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>19412</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>792</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+    </index>
+    <key id="323" parent="275" name="products_pkey">
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>19413</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>792</StateNumber>
+      <UnderlyingIndexId>19412</UnderlyingIndexId>
+    </key>
+    <column id="324" parent="276" name="id">
       <DefaultExpression>nextval(&apos;users_id_seq&apos;::regclass)</DefaultExpression>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -4261,26 +4662,26 @@ false Zulu
       <SequenceId>19371</SequenceId>
       <TypeId>23</TypeId>
     </column>
-    <column id="270" parent="268" name="name">
+    <column id="325" parent="276" name="name">
       <Position>2</Position>
       <StateNumber>785</StateNumber>
       <StoredType>varchar(100)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="271" parent="268" name="email">
+    <column id="326" parent="276" name="email">
       <Position>3</Position>
       <StateNumber>785</StateNumber>
       <StoredType>varchar(100)|0s</StoredType>
       <TypeId>1043</TypeId>
     </column>
-    <column id="272" parent="268" name="created_at">
+    <column id="327" parent="276" name="created_at">
       <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
       <Position>4</Position>
       <StateNumber>785</StateNumber>
       <StoredType>timestamp|0s</StoredType>
       <TypeId>1114</TypeId>
     </column>
-    <index id="273" parent="268" name="users_pkey">
+    <index id="328" parent="276" name="users_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>19377</ObjectId>
@@ -4289,7 +4690,7 @@ false Zulu
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <index id="274" parent="268" name="users_email_key">
+    <index id="329" parent="276" name="users_email_key">
       <ColNames>email</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>19379</ObjectId>
@@ -4300,14 +4701,14 @@ false Zulu
       <CollationIds>100</CollationIds>
       <CollationParentNames>pg_catalog</CollationParentNames>
     </index>
-    <key id="275" parent="268" name="users_pkey">
+    <key id="330" parent="276" name="users_pkey">
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>19378</ObjectId>
       <Primary>1</Primary>
       <StateNumber>785</StateNumber>
       <UnderlyingIndexId>19377</UnderlyingIndexId>
     </key>
-    <key id="276" parent="268" name="users_email_key">
+    <key id="331" parent="276" name="users_email_key">
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>19380</ObjectId>
       <StateNumber>785</StateNumber>
